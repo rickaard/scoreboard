@@ -13,9 +13,10 @@ export class Table extends Component {
         for(let i = 0; i < this.props.playerlist.length; i++) {
             columns.push(<td key={randomID + i}>
                             <input 
-                                onChange={ (event) => { this.props.handleChange(event) } }
+                                type="tel"
+                                // onChange={ (event) => { this.props.handleChange(event) } }
                                 // value={this.props.inputValue}
-                                onKeyDown={ () => { this.props.updateScore(i, rowIndex) } }
+                                onKeyDown={ (e) => { this.props.updateScore(i, rowIndex, e) } }
                             />
                         </td>)
         }

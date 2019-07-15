@@ -50,23 +50,31 @@ class App extends React.Component {
     })
   }
 
-  updateScore = (playerIndex, holeIndex) => {
+  updateScore = (playerIndex, holeIndex, e) => {
 
-    const value = this.state.inputValue
+    console.log('hela state.score', this.state.score);
+    console.log('index score', this.state.score[playerIndex]);
+    console.log('med namn och score', this.state.players[playerIndex], this.state.score[playerIndex]);
+    
+       
+    
 
-    this.setState(state => {
-      const score = state.score.map(player => console.log(value)
-      );
+    // const value = this.state.inputValue
 
-      return {
-        score,
-      }
-    })
+    // var joined = this.state.myArray.concat('new value');
+    // this.setState({ myArray: joined })
 
-    console.log(`playerindex: ${playerIndex}`); 
-    console.log(`holeindex: ${holeIndex}`);
-    console.log(this.state.players);
-    console.log(this.state.score);
+    // this.setState({score: item}, () => {console.log(this.state.score);});
+
+    // this.setState(prevState => ({
+    //   score: [...prevState.score[playerIndex], this.state.inputValue]
+    // }))
+
+
+    // console.log(`playerindex: ${playerIndex}`); 
+    // console.log(`holeindex: ${holeIndex}`);
+    // console.log('players-state', this.state.players);
+    // console.log('score-state', this.state.score);
   }
 
   handleKeyPress = (event) => {
@@ -92,8 +100,8 @@ class App extends React.Component {
     this.setState({
       showTable: !this.state.showTable
     })
-    console.log(this.state.players);
-    console.log(this.state.score);
+    console.log('från showtable-metod',this.state.players);
+    console.log('från showtable-metod',this.state.score);
     
   }
 
