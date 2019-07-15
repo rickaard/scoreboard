@@ -56,25 +56,6 @@ class App extends React.Component {
     console.log('index score', this.state.score[playerIndex]);
     console.log('med namn och score', this.state.players[playerIndex], this.state.score[playerIndex]);
     
-       
-    
-
-    // const value = this.state.inputValue
-
-    // var joined = this.state.myArray.concat('new value');
-    // this.setState({ myArray: joined })
-
-    // this.setState({score: item}, () => {console.log(this.state.score);});
-
-    // this.setState(prevState => ({
-    //   score: [...prevState.score[playerIndex], this.state.inputValue]
-    // }))
-
-
-    // console.log(`playerindex: ${playerIndex}`); 
-    // console.log(`holeindex: ${holeIndex}`);
-    // console.log('players-state', this.state.players);
-    // console.log('score-state', this.state.score);
   }
 
   handleKeyPress = (event) => {
