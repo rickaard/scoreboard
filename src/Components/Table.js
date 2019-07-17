@@ -5,42 +5,39 @@ import './TableStyle.css';
 export class Table extends Component {
 
 
-
-    tableColumns = (rowIndex) => {
-        let randomID = Math.floor(Math.random() * 999999);
-        var columns = []
-
-        for(let i = 0; i < this.props.playerlist.length; i++) {
-            columns.push(<td key={randomID + i}>
-                            <input 
-                                type="tel"
-                                // onChange={ (event) => { this.props.handleChange(event) } }
-                                // value={this.props.inputValue}
-                                onKeyDown={ (e) => { this.props.updateScore(i, rowIndex, e) } }
-                            />
-                        </td>)
-        }
-        return columns;
-    }
-
-    tableLoop = () => {
-        let randomID = Math.floor(Math.random() * 999);
-        var rows = [];
-
-        for (let i = 1; i <= this.props.holes; i++) {
-            rows.push(
-            <tr key={randomID + i}>
-                <td>{i}</td>
-                {this.tableColumns(i)}
-            </tr>
-            )
-        }
-        return rows;
-    } 
-
-
-
     render() {
+
+        const { players, scores } = this.props;
+
+        const headRows = players.map((player) => (
+            <th key={`head_${player}`}>
+                {player}
+            </th>
+        ));
+
+        const holeRows = scores.map((score, holeindex) => (
+                <tr key={`hole_${holeindex}`}>
+                    <td>{holeindex + 1}</td>
+                    {
+                        players.map((player, playerindex) => (
+                            <td key={`score_${holeindex}_${playerindex}`}>
+                                <input
+                                    type="tel"
+                                    min="0"
+                                    value={score[playerindex]}
+                                    onChange={(e) => this.props.onUpdateScore(playerindex, holeindex, parseInt(e.target.value, 10))} />
+                            </td>
+                        ))
+                    }
+                </tr>
+            )
+        );
+
+        const footRows = players.map((player, playerindex) => (
+            <td key={`foot_${playerindex}`}>
+                {scores.reduce((prev, curr) => prev + curr[playerindex], 0)}
+            </td>
+        ));
 
         const tableStyle = {
             width: '100%',
@@ -51,30 +48,24 @@ export class Table extends Component {
 
         
         return (
-
-
             <div style={tableStyle} className="table-wrapper">
-
                 <table style={tableStyle}>
                     <thead>
                         <tr>
                             <th></th>
-                            { this.props.playerlist.map((p, index,) => (
-                            <th key={index}>{p}</th>
-                            )) }
+                            {headRows}
                         </tr>
                     </thead>
                     <tbody>
-                        {this.tableLoop()}
+                        {holeRows}
                     </tbody>
                     <tfoot>
                         <tr>
                             <td>Tot</td>
-                            {this.tableColumns()}
+                            {footRows}
                         </tr>
                     </tfoot>
                 </table>
-
             </div>
         )
     }

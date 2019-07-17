@@ -13,7 +13,7 @@ class App extends React.Component {
       inputValue: '',
       showTable: false,
       players: [],
-      score: [],
+      scores: undefined,
       holeAmount: 18,
     }
   }
@@ -24,6 +24,8 @@ class App extends React.Component {
     })
   }
 
+  // set state.showmodal to false when clicked outside of the modal
+  // and empty the input-field
   handleOutsideClick = (event) => {
     if (event.target.className === 'modal') {
       this.setState({
@@ -40,36 +42,47 @@ class App extends React.Component {
   }
 
 
-  addPlayer = () => {
 
+  // Add player name to state.players
+  addPlayer = () => {
     this.setState({
       players: this.state.players.concat(this.state.inputValue),
-      score: this.state.score.concat(""),
       inputValue: '',
       showModal: false,
     })
   }
 
-  updateScore = (playerIndex, holeIndex, e) => {
-
-    console.log('hela state.score', this.state.score);
-    console.log('index score', this.state.score[playerIndex]);
-    console.log('med namn och score', this.state.players[playerIndex], this.state.score[playerIndex]);
-    
-  }
-
+  // Add player name to state.players when press on Enter
   handleKeyPress = (event) => {
     if(event.keyCode === 13) {
 
       this.setState({
         players: this.state.players.concat(this.state.inputValue),
-        score: this.state.score.concat(""),
         showModal: false,
         inputValue: ''
       })
     }
   }
 
+
+  onUpdateScore = (playerIndex, holeIndex, score) => {
+    this.setState(prevState => {
+        const copiedScores = [].concat(prevState.scores);
+        const copiedHoleScores = [].concat(copiedScores[holeIndex]);
+        copiedHoleScores[playerIndex] = score;
+
+        copiedScores[holeIndex] = copiedHoleScores;
+
+        return {
+            scores: copiedScores
+        };
+    });
+    console.log(this.state);
+  }
+
+
+
+  // Remove player name from state.player
   removePlayer = (i) => {
     this.setState({
       players: this.state.players.filter((item, j) => i !== j)
@@ -77,18 +90,26 @@ class App extends React.Component {
 
   }
 
+  // Add correct amount of arrays to the state.score-array
+  // and toggle state.showtable to switch view to the scoreboard table
   showTable = () => {
+
+    const scores = [];
+    for(let i = 0; i < this.state.holeAmount; i++) {
+      scores[i] = this.state.players.map(p => 0);
+    }
+
     this.setState({
-      showTable: !this.state.showTable
+      showTable: !this.state.showTable,
+      scores: scores,
     })
-    console.log('från showtable-metod',this.state.players);
-    console.log('från showtable-metod',this.state.score);
-    
+
+    console.log(this.state.players);
+    console.log(this.state.score);
   }
 
 
   render() {
-
 
       let startContent =
       <React.Fragment>  
@@ -114,11 +135,9 @@ class App extends React.Component {
       let tableContent =
       <React.Fragment>
         <Table 
-          playerlist={this.state.players} 
-          holes={this.state.holeAmount} 
-          inputValue={this.state.inputValue} 
-          handleChange={this.handleChange} 
-          updateScore={this.updateScore} 
+          players={this.state.players}
+          scores={this.state.scores}
+          onUpdateScore={this.onUpdateScore}
         />
       </React.Fragment>
 
