@@ -48,7 +48,6 @@ export class Modal extends Component {
                             value={this.props.inputValue} 
                             onKeyDown={ (event) => { this.props.handleKeyPress(event) } }
                         />
-                        {/* <button id="inputAdd" className="btn btn-add" onClick={ (event) => { this.props.addPlayer(event) } }>+</button> */}
                         <button id="inputAdd" className="btn btn-add" onClick={ (event) => { this.props.addPlayer(event) } }><FontAwesomeIcon style={checkStyle} icon={faUserPlus}/></button>
                     </div>
                 </div>

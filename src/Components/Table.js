@@ -7,6 +7,12 @@ export class Table extends Component {
 
     render() {
 
+        const tdStyle = {
+            width: '80px',
+            color: '#606060'
+        }
+
+
         const { players, scores } = this.props;
 
         const headRows = players.map((player) => (
@@ -17,14 +23,14 @@ export class Table extends Component {
 
         const holeRows = scores.map((score, holeindex) => (
                 <tr key={`hole_${holeindex}`}>
-                    <td>{holeindex + 1}</td>
+                    <td style={tdStyle}>{holeindex + 1}</td>
                     {
                         players.map((player, playerindex) => (
                             <td key={`score_${holeindex}_${playerindex}`}>
                                 <input
                                     type="tel"
                                     min="0"
-                                    value={score[playerindex]}
+                                    value={score[playerindex] || ''}
                                     onChange={(e) => this.props.onUpdateScore(playerindex, holeindex, parseInt(e.target.value, 10))} />
                             </td>
                         ))
@@ -43,7 +49,8 @@ export class Table extends Component {
             width: '100%',
             textAlign: 'center',
             backgroundColor: '#fff',
-            tableLayout: 'fixed'
+            tableLayout: 'fixed',
+            marginBottom: '10px'
         }
 
         
@@ -52,7 +59,7 @@ export class Table extends Component {
                 <table style={tableStyle}>
                     <thead>
                         <tr>
-                            <th></th>
+                            <th style={tdStyle}></th>
                             {headRows}
                         </tr>
                     </thead>
@@ -61,11 +68,12 @@ export class Table extends Component {
                     </tbody>
                     <tfoot>
                         <tr>
-                            <td>Tot</td>
+                            <td style={tdStyle}>Tot</td>
                             {footRows}
                         </tr>
                     </tfoot>
                 </table>
+                <button className="btn btn-danger" onClick={ () => { this.props.clearStorage() } }>Börja om</button>
             </div>
         )
     }

@@ -8,15 +8,25 @@ class App extends React.Component {
   constructor(props) {
     super(props);
 
+    const players = JSON.parse(localStorage.getItem("players")) || [];
+    const scores = JSON.parse(localStorage.getItem("result")) || undefined;
+
+
+    
+
     this.state = {
       showModal: false,
       inputValue: '',
       showTable: false,
-      players: [],
-      scores: undefined,
+      players: players,
+      // scores: undefined,
+      scores: scores,
       holeAmount: 18,
     }
+    console.log(this.state.scores);
   }
+
+  
 
   toggleModal = () => {
     this.setState({
@@ -49,8 +59,14 @@ class App extends React.Component {
       players: this.state.players.concat(this.state.inputValue),
       inputValue: '',
       showModal: false,
-    })
+      scores: undefined
+    }, () => {
+      localStorage.setItem("players", JSON.stringify(this.state.players));
+      localStorage.removeItem("result");
+    });
+
   }
+
 
   // Add player name to state.players when press on Enter
   handleKeyPress = (event) => {
@@ -58,9 +74,14 @@ class App extends React.Component {
 
       this.setState({
         players: this.state.players.concat(this.state.inputValue),
+        inputValue: '',
         showModal: false,
-        inputValue: ''
-      })
+        scores: undefined
+      }, () => {
+        localStorage.setItem("players", JSON.stringify(this.state.players));
+        localStorage.removeItem("result");
+        
+      });
     }
   }
 
@@ -76,41 +97,57 @@ class App extends React.Component {
         return {
             scores: copiedScores
         };
+    }, () => {
+      localStorage.setItem("result", JSON.stringify(this.state.scores));
     });
-    console.log(this.state);
   }
 
-
+  clearStorage = () => {
+    localStorage.clear();
+    this.setState({
+      players: [],
+      scores: undefined,
+      showTable: false
+    })
+  }
 
   // Remove player name from state.player
   removePlayer = (i) => {
-    this.setState({
-      players: this.state.players.filter((item, j) => i !== j)
-    })
 
+    this.setState(prevState => {
+      return {
+        players: prevState.players.filter((item, j) => i !== j)
+      }
+    }, () => {
+      localStorage.setItem("players", JSON.stringify(this.state.players));
+    })
   }
 
   // Add correct amount of arrays to the state.score-array
   // and toggle state.showtable to switch view to the scoreboard table
+
+
   showTable = () => {
 
-    const scores = [];
-    for(let i = 0; i < this.state.holeAmount; i++) {
-      scores[i] = this.state.players.map(p => 0);
+    const generateInitialScore = (state) => {
+      const emptyScore = []
+      for(let i = 0; i < state.holeAmount; i++) {
+        emptyScore[i] = state.players.map(p => 0);
+      }
+      return emptyScore;
     }
 
-    this.setState({
-      showTable: !this.state.showTable,
-      scores: scores,
-    })
-
-    console.log(this.state.players);
-    console.log(this.state.score);
+    this.setState(prevState => {
+      return {
+        showTable: !prevState.showTable,
+        scores: prevState.scores !== undefined ? prevState.scores : generateInitialScore(prevState)
+      }
+    });
   }
 
 
   render() {
-
+    
       let startContent =
       <React.Fragment>  
         <Header toggleModal={this.toggleModal}/>
@@ -128,9 +165,9 @@ class App extends React.Component {
         <Playerlist showPlayers={this.state.players} removePlayer={this.removePlayer}/>
 
         <div className="startBtn-wrapper">
-          <button id="startBtn" className="btn btn-success" onClick={ () => { this.showTable() } }>Start</button>
+          <button disabled={(this.state.players.length === 0)} id="startBtn" className="btn btn-success" onClick={this.showTable}>{(this.state.scores === undefined) ? 'Start' : 'Fortsätt'}</button>
         </div>
-      </React.Fragment> 
+      </React.Fragment>;
 
       let tableContent =
       <React.Fragment>
@@ -138,6 +175,7 @@ class App extends React.Component {
           players={this.state.players}
           scores={this.state.scores}
           onUpdateScore={this.onUpdateScore}
+          clearStorage={this.clearStorage}
         />
       </React.Fragment>
 
