@@ -19,11 +19,9 @@ class App extends React.Component {
       inputValue: '',
       showTable: false,
       players: players,
-      // scores: undefined,
       scores: scores,
       holeAmount: 18,
     }
-    console.log(this.state.scores);
   }
 
   

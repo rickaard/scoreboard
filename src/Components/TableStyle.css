@@ -10,3 +10,10 @@ table {
 td {
     padding: 8px 0;
 }
+
+thead > tr > th {
+    position: sticky;
+    top: 0;
+    background-color: #AA3838;
+    color: #fbfbfb;
+}

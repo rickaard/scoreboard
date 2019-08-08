@@ -5,12 +5,28 @@ import './TableStyle.css';
 export class Table extends Component {
 
 
+
     render() {
 
         const tdStyle = {
             width: '80px',
             color: '#606060'
         }
+
+        const tableStyle = {
+            width: '100%',
+            textAlign: 'center',
+            backgroundColor: '#fff',
+            tableLayout: 'fixed',
+            marginBottom: '10px'
+        }
+
+        // const stickyTableHeader = {
+        //     position: "sticky",
+        //     top: "0",
+        //     backgroundColor: "#AA3838",
+        //     color: "#fbfbfb",
+        // }
 
 
         const { players, scores } = this.props;
@@ -45,18 +61,12 @@ export class Table extends Component {
             </td>
         ));
 
-        const tableStyle = {
-            width: '100%',
-            textAlign: 'center',
-            backgroundColor: '#fff',
-            tableLayout: 'fixed',
-            marginBottom: '10px'
-        }
+
 
         
         return (
             <div style={tableStyle} className="table-wrapper">
-                <table style={tableStyle}>
+                <table style={tableStyle} id="table">
                     <thead>
                         <tr>
                             <th style={tdStyle}></th>
